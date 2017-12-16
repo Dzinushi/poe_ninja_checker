@@ -7,6 +7,7 @@ from random import randint
 from tkinter import *
 
 import poe_ninja_parser
+import update_data
 
 
 def find_poe_item(buffer_data):
@@ -31,6 +32,11 @@ def listFilesInDir(directory, files):
 
 # Check conditions for buffer
 def check_conditions(interval):
+    try:
+        window.clipboard_get()
+    finally:
+        window.clipboard_clear()
+        window.clipboard_append('poe.ninja checker_(by Dzinushi)')
     while True:
         buffer_data = window.clipboard_get()
         window.focus_force()
@@ -93,9 +99,11 @@ def get_data():
 
 # Run function check_conditions in thread
 def start(event):
-    # Get data from source
-    get_data()
+
+    # Hide window
     window.withdraw()
+
+    # Create thread for main process
     t = threading.Thread(target=check_conditions, args=(1,))
     t.daemon = True
     t.start()
@@ -112,6 +120,12 @@ items_dic = defaultdict(int)
 # Set music
 music_for_good_item = listFilesInDir('../resources/sounds/good', [])
 music_for_bad_item = listFilesInDir('../resources/sounds/bad', [])
+
+# Update data from poe.ninja
+update_data.update_html(update_data.League.STANDARD)
+
+# Get data from source
+get_data()
 
 # Create window
 window = Tk()

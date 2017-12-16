@@ -56,15 +56,11 @@ def filter_by_price(names, prices, price_filters):
 def divination_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('<tr class=""><td><span class="[^"]+"><span class="[^"]+"><.span>',
+    names = get_name_by_regex('<img src="[^"]+".><.span>',
                               data,
                               '<',
                               [])
-    names = get_name_by_regex('img src="[^"]+"><.span>',
-                              data,
-                              '<',
-                              names)
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -78,11 +74,11 @@ def divination_format_html(filename, price_filters):
 def weapons_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+">(<.span><span>|<.span><span class="relic-text">)',
+    names = get_name_by_regex('<img src="[^"]+".><.span>(<span>|<span class="relic-text">)',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -96,11 +92,11 @@ def weapons_format_html(filename, price_filters):
 def armors_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+">(<.span><span>|<.span><span class="relic-text">)',
+    names = get_name_by_regex('<img src="[^"]+".><.span>(<span>|<span class="relic-text">)',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -114,11 +110,11 @@ def armors_format_html(filename, price_filters):
 def flasks_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+">(<.span><span>|<.span><span class="relic-text">)',
+    names = get_name_by_regex('<img src="[^"]+".><.span>(<span>|<span class="relic-text">)',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -132,11 +128,11 @@ def flasks_format_html(filename, price_filters):
 def accessories_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+">(<.span><span>|<.span><span class="relic-text">)',
+    names = get_name_by_regex('<img src="[^"]+".><.span>(<span>|<span class="relic-text">)',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -150,11 +146,11 @@ def accessories_format_html(filename, price_filters):
 def jewels_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+"><.span>',
+    names = get_name_by_regex('<img src="[^"]+".><.span>(|<span class="relic-text">)',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
@@ -168,11 +164,11 @@ def jewels_format_html(filename, price_filters):
 def maps_format_html(filename, price_filters):
     with open(filename) as file:
         data = file.read()
-    names = get_name_by_regex('img src="[^"]+">(<.span><span>|<.span><span class="relic-text">)',
+    names = get_name_by_regex('<img src="[^"]+".><.span><span>',
                               data,
                               '<',
                               [])
-    prices = get_price_by_regex(' x <img title="Chaos Orb"',
+    prices = get_price_by_regex(' x <img src="[^"]+".title="Chaos Orb"',
                                 data,
                                 '>',
                                 [])
