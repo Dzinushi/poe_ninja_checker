@@ -8,6 +8,9 @@ from tkinter import *
 import utils
 
 
+min_price = 3.0  # chaos
+
+
 def find_poe_item(buffer_data):
     # or divination card
     if buffer_data.find('Rarity: Unique') != -1 or buffer_data.find('Rarity: Divination Card') != -1:
@@ -44,7 +47,7 @@ def check_conditions(interval):
             print('Find poe item')
             # Getting item name
             item_name = get_item_name(buffer_data)
-            if items_dic[item_name] > 0:
+            if items_dic[item_name] > min_price:
                 print('Item: {}\nPrice: {} chaos'.format(item_name, items_dic[item_name]))
                 sound = music_for_good_item[randint(0, len(music_for_good_item) - 1)]
             else:
