@@ -2,12 +2,10 @@ import os
 import threading
 import time
 import winsound
-from collections import defaultdict
 from random import randint
 from tkinter import *
 
-import poe_ninja_parser
-import update_data
+import utils
 
 
 def find_poe_item(buffer_data):
@@ -32,11 +30,11 @@ def listFilesInDir(directory, files):
 
 # Check conditions for buffer
 def check_conditions(interval):
-    try:
-        window.clipboard_get()
-    finally:
-        window.clipboard_clear()
-        window.clipboard_append('poe.ninja checker_(by Dzinushi)')
+    window.clipboard_clear()
+    window.clipboard_append('poe.ninja checker_(by Dzinushi)')
+
+    global items_dic
+
     while True:
         buffer_data = window.clipboard_get()
         window.focus_force()
@@ -68,40 +66,23 @@ def get_item_name(buffer_data):
     return list_params[1]
 
 
-# Get data from source file and creating dictionary of items
-def get_data():
-    # Read source files
-    divinations_dic = poe_ninja_parser.divination_format_html(filename='../resources/html/divinations.html',
-                                                              price_filters=[10000000, 5])
-    weapons_dic = poe_ninja_parser.weapons_format_html(filename='../resources/html/weapons.html',
-                                                       price_filters=[10000000, 5])
-    armors_dic = poe_ninja_parser.weapons_format_html(filename='../resources/html/armors.html',
-                                                      price_filters=[10000000, 5])
-    flasks_dic = poe_ninja_parser.flasks_format_html(filename='../resources/html/flasks.html',
-                                                     price_filters=[10000000, 5])
-    accessories_dic = poe_ninja_parser.accessories_format_html(filename='../resources/html/accessories.html',
-                                                               price_filters=[10000000, 5])
-    jewels_dic = poe_ninja_parser.jewels_format_html(filename='../resources/html/jewels.html',
-                                                     price_filters=[10000000, 5])
-
-    maps_dic = poe_ninja_parser.jewels_format_html(filename='../resources/html/maps.html',
-                                                   price_filters=[10000000, 5])
-
-    # Creating one dictionary
-    items_dic.update(divinations_dic)
-    items_dic.update(weapons_dic)
-    items_dic.update(armors_dic)
-    items_dic.update(flasks_dic)
-    items_dic.update(accessories_dic)
-    items_dic.update(jewels_dic)
-    items_dic.update(maps_dic)
-
-
 # Run function check_conditions in thread
 def start(event):
-
     # Hide window
     window.withdraw()
+
+    global items_dic, rbutton_choose
+
+    if rbutton_choose.get() is 1:
+        league = utils.League.STANDARD
+    else:
+        league = utils.League.CHALLENGE
+
+    # Update data from poe.ninja
+    json_data = utils.update_html_json(league)
+
+    # Parse JSON-data
+    items_dic = utils.parse_json(json_data)
 
     # Create thread for main process
     t = threading.Thread(target=check_conditions, args=(1,))
@@ -111,21 +92,13 @@ def start(event):
 
 # Set variables
 buffer_data = ''
-# interval = 15.0  # seconds
-t = None
-
-# Full good item list
-items_dic = defaultdict(int)
 
 # Set music
 music_for_good_item = listFilesInDir('../resources/sounds/good', [])
 music_for_bad_item = listFilesInDir('../resources/sounds/bad', [])
 
-# Update data from poe.ninja
-update_data.update_html(update_data.League.STANDARD)
-
-# Get data from source
-get_data()
+# Full item list
+items_dic = None
 
 # Create window
 window = Tk()
@@ -135,6 +108,15 @@ window.geometry("300x200+100+100")
 button = Button(window, text='Start')
 button.pack(expand='YES')
 button.bind('<Button-1>', start)
+
+# Create radiobuttons
+rbutton_choose = IntVar()
+rbutton_standard = Radiobutton(window, text='Standard', variable=rbutton_choose, value=1)
+rbutton_standard.pack(expand='YES')
+rbutton_challenge = Radiobutton(window, text='Challenge', variable=rbutton_choose, value=2)
+rbutton_challenge.pack(expand='YES')
+
+rbutton_choose.set(1)
 
 # Run window
 window.mainloop()
