@@ -38,20 +38,25 @@ def check_conditions(interval):
 
     global items_dic
 
+    print('\nWaiting ctrl+c events ...')
+
     while True:
-        buffer_data = window.clipboard_get()
-        window.focus_force()
-        # print(buffer_data)
+        try:
+            buffer_data = window.clipboard_get()
+        except Exception as e:
+            time.sleep(interval)
+            continue
+        # window.focus_force()
+
         # Parse buffer and run process
         if find_poe_item(buffer_data=buffer_data):
             print('Find poe item')
             # Getting item name
             item_name = get_item_name(buffer_data)
+            print('Item: {}\nPrice: {} chaos'.format(item_name, items_dic[item_name]))
             if items_dic[item_name] > min_price:
-                print('Item: {}\nPrice: {} chaos'.format(item_name, items_dic[item_name]))
                 sound = music_for_good_item[randint(0, len(music_for_good_item) - 1)]
             else:
-                print('shit')
                 sound = music_for_bad_item[randint(0, len(music_for_bad_item) - 1)]
 
             winsound.PlaySound(sound, winsound.SND_ASYNC | winsound.SND_ALIAS)

@@ -28,9 +28,6 @@ URLS_CHALLENGE = {'https://poe.ninja/api/Data/GetUniqueJewelOverview?league=Abys
                   'https://poe.ninja/api/Data/GetUniqueArmourOverview?league=Abyss': 'armors',
                   'https://poe.ninja/api/Data/GetUniqueAccessoryOverview?league=Abyss': 'accessories'}
 
-data_template = '&date=2017-12-17'
-
-
 # Connecting to poe.ninja API and get JSON-data
 def update_html_json(league=League.STANDARD):
     # List JSON-items
@@ -68,13 +65,15 @@ def parse_json(json_items):
     # Create list_items
     list_items = defaultdict(int)
 
+    print('Parsing data from poe.ninja')
+
     # Get item_type and it JSON data. Example item_type: armory, weapons, ...
     for item_type, json_data in json_items.items():
         for element in json_data.items():
             list_cur_items = element[1]
             for item in list_cur_items:
                 list_items[item['name']] = item['chaosValue']
-
+            print(item_type + ': ' + str(len(list_cur_items)))
     return list_items
 
 
