@@ -4,9 +4,9 @@ import time
 import winsound
 from random import randint
 from tkinter import *
-
+from gtts import gTTS
+from playsound import playsound
 import utils
-
 
 min_price = 3.0  # chaos
 
@@ -40,6 +40,8 @@ def check_conditions(interval):
 
     print('\nWaiting ctrl+c events ...')
 
+    filepath = '../resources/temp/price.mp3'
+
     while True:
         try:
             buffer_data = window.clipboard_get()
@@ -54,12 +56,17 @@ def check_conditions(interval):
             # Getting item name
             item_name = get_item_name(buffer_data)
             print('Item: {}\nPrice: {} chaos'.format(item_name, items_dic[item_name]))
+
             if items_dic[item_name] > min_price:
-                sound = music_for_good_item[randint(0, len(music_for_good_item) - 1)]
+                price_str = str(round(items_dic[item_name])) + " хаоса"
+                tts = gTTS(text=price_str, lang='ru')
+                tts.save(filepath)
+                playsound(filepath, block=False)
+                os.system('rm %s' % filepath)
+                # sound = music_for_good_item[randint(0, len(music_for_good_item) - 1)]
             else:
                 sound = music_for_bad_item[randint(0, len(music_for_bad_item) - 1)]
-
-            winsound.PlaySound(sound, winsound.SND_ASYNC | winsound.SND_ALIAS)
+                winsound.PlaySound(sound, winsound.SND_ASYNC | winsound.SND_ALIAS)
 
             # Clear buffer
             window.clipboard_clear()
